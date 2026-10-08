@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software in teaching or research, please cite the software repository and the associated publication when available."
+title: "QAA — Validação Analítica"
+type: software
+version: "0.2.0"
+date-released: "2026-10-08"
+authors:
+  - family-names: "Botelho"
+    given-names: "Bruno Gonçalves"
+repository-code: "https://github.com/botelhobg/qaa-validacao"
+url: "https://github.com/botelhobg/qaa-validacao"
+license: "All rights reserved"
+keywords:
+  - analytical chemistry
+  - method validation
+  - linearity
+  - matrix effect
+  - chemometrics
+  - teaching
