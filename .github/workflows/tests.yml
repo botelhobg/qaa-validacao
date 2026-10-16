@@ -17,4 +17,5 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python test_core.py
       - run: python test_new_modules.py
+      - run: python test_ui_smoke.py
       - run: python -m compileall -q .
