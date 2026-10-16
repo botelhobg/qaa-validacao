@@ -105,8 +105,8 @@ def _lob_lod_tab():
         a,b=st.columns(2)
         a.metric("LoB",f'{r["lob"]:.5g}')
         b.metric("LoD (estimado)",f'{r["lod"]:.5g}')
-        st.latex(r"LoB=\\bar C_B+c_\\alpha s_B")
-        st.latex(r"LoD=LoB+c_\\beta s_L")
+        st.latex(r"LoB=\bar C_B+c_\alpha s_B")
+        st.latex(r"LoD=LoB+c_\beta s_L")
         st.caption(
             f"Branco: n={r['n_blank']}, média={r['mean_blank']:.4g}, "
             f"s={r['sd_blank']:.4g}, cα={r['c_blank']:.4g}."
@@ -185,8 +185,8 @@ def _ich_tab():
         a,b=st.columns(2)
         a.metric("DL estimado",f'{r["lod"]:.5g}')
         b.metric("QL estimado",f'{r["loq"]:.5g}')
-        st.latex(r"DL=\\frac{3{,}3\\sigma}{|S|}")
-        st.latex(r"QL=\\frac{10\\sigma}{|S|}")
+        st.latex(r"DL=\frac{3{,}3\sigma}{|S|}")
+        st.latex(r"QL=\frac{10\sigma}{|S|}")
         st.warning(
             "Valores estimados não substituem a verificação experimental "
             "da precisão, viés e desempenho no nível de quantificação pretendido."
@@ -369,8 +369,8 @@ def _cc_tab():
         a,b=st.columns(2)
         a.metric("CCα — limite de decisão",f'{r["cc_alpha"]:.5g}')
         b.metric("CCβ — teor verdadeiro detectado com 1−β",f'{r["cc_beta"]:.5g}')
-        st.latex(r"CC_\\alpha=L+z_{1-\\alpha}\\,s")
-        st.latex(r"CC_\\beta=CC_\\alpha+z_{1-\\beta}\\,s")
+        st.latex(r"CC_\alpha=L+z_{1-\alpha}\,s")
+        st.latex(r"CC_\beta=CC_\alpha+z_{1-\beta}\,s")
         if r["noncompliant"]:
             st.error(
                 f"Resultado {measured:.5g} > CCα {r['cc_alpha']:.5g}: "
