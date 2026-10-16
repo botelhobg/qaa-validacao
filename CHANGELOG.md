@@ -2,6 +2,24 @@
 
 All notable changes to **QAA — Validação Analítica** will be documented here.
 
+## [0.3.0] — 2026-10-16
+
+### Added
+- Configuração independente de níveis e replicatas para linearidade e curvas de matriz.
+- Suporte a réplicas desbalanceadas, com edição de cada nível e exportação CSV do modelo.
+- Módulo de precisão (repetibilidade/precisão intermediária por ANOVA).
+- Módulo de veracidade/viés frente a MR ou MRC.
+- Módulo de recuperação por fortificação e critérios editáveis.
+- Testes de regressão para os novos módulos.
+
+### Fixed
+- O aplicativo não declara linearidade validada quando falta teste de erro puro/falta de ajuste.
+- Recomendação de curva em solvente condicionada à adequação prévia das duas curvas.
+
+### Notes
+- A sequência real das medições deve ser preservada para interpretação de Durbin–Watson.
+- Critérios estatísticos e analíticos dependem do guia aplicável.
+
 ## [0.2.0] — 2026-10-08
 
 ### Added
