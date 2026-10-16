@@ -2,6 +2,20 @@
 
 All notable changes to **QAA — Validação Analítica** will be documented here.
 
+## [0.4.0] — 2026-10-16
+
+### Added
+- Limites analíticos e decisão: LoB/LoD (brancos + baixo nível), DL/QL por σ/S segundo ICH Q2(R2), LoQ experimental (CV e viés) e CCα/CCβ gaussiano unilateral didático.
+- Planos de estudo configuráveis com concentrações e réplicas desbalanceadas para LoQ experimental.
+- Riscos α e β ajustáveis, gráficos e interpretação dos limites.
+- Notas de escopo para diferenciar estimativas didáticas de procedimentos regulatórios.
+- Testes numéricos independentes e teste de abertura do novo módulo.
+- Documentação metodológica em `docs/LIMITS.md`.
+
+### Caution
+- A demonstração de CCα/CCβ não substitui o Regulamento (UE) 2021/808.
+- Os limites estimados exigem verificação em condições reais do método.
+
 ## [0.3.1] — 2026-10-16
 
 ### Added
