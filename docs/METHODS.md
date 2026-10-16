@@ -161,7 +161,53 @@ for descriptive interpretation.
 
 ---
 
-## 8. Decision logic
+## 8. Spike-recovery assays: distinct analytical questions
+
+Two procedures are represented explicitly, because the same expression
+"ensaio de adição-recuperação" is often used for different designs.
+
+### 8.1 Known-concentration fortification of a blank matrix
+
+When the blank matrix is demonstrably free of the analyte, a known
+concentration can be prepared independently and processed by the method:
+
+\[
+R(\%) = 100\,\frac{C_{\mathrm{encontrada}}}{C_{\mathrm{adicionada}}}
+\]
+
+A recovery near 100% evaluates how closely the method reproduces the known
+amount in the tested matrix and procedure. Its relevance to trueness depends
+on the representativeness of the matrix, independent preparation, spike
+timing, and uncertainty of the assigned concentration.
+
+### 8.2 Incremental fortification of a sample containing native analyte
+
+For a sample that already contains analyte, the increase due to a known
+addition is evaluated as:
+
+\[
+R(\%) = 100\,\frac{C_{\mathrm{fortificada}} - C_{\mathrm{original}}}
+{C_{\mathrm{adicionada}}}
+\]
+
+The baseline concentration must be measured appropriately and dilution
+effects must be corrected. Each software row represents paired observations
+or a justified baseline estimate.
+
+**Limitation:** an additive bias can cancel in the difference. For example,
+if a sample truly contains 10 mg/L but is reported as 12 mg/L, adding
+5 mg/L and measuring 17 mg/L produces 100% incremental recovery despite
+a +2 mg/L bias in the native-analyte result. Thus, incremental spike
+recovery is not, on its own, proof of trueness.
+
+For both designs, the application reports individual recoveries, mean,
+standard deviation, coefficient of variation and confidence interval
+(when replication allows). User-defined recovery bounds apply to the mean
+only; they do not constitute universal acceptance criteria.
+
+---
+
+## 9. Decision logic
 
 The application intentionally separates:
 
