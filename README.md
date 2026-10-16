@@ -12,6 +12,33 @@ Módulos disponíveis:
 
 O projeto está sendo organizado também como software de pesquisa, com documentação metodológica, testes automáticos, versionamento e plano de verificação para futura publicação.
 
+
+## Novidades da versão 0.3
+
+### Desenho experimental configurável
+
+No módulo **Linearidade** ou em cada curva do módulo **Efeito de matriz**, escolha **Configurar ensaio**.
+
+1. Informe o número de níveis (2–40) e um número inicial de réplicas por nível (1–50).
+2. Edite as **concentrações reais** e, se necessário, a quantidade de réplicas individual de cada nível.
+3. Clique em **Gerar/redefinir tabela vazia**.
+4. Digite ou cole as respostas e execute o cálculo.
+5. Também é possível continuar com um exemplo, colar uma tabela livre ou importar CSV/Excel.
+
+Exemplos de desenhos suportados: **4 níveis × 2 réplicas**, **7 níveis × 3 réplicas**, **5 níveis com 2/3/2/4/3 réplicas**, etc. As curvas de solvente e matriz podem ter planos distintos.
+
+**Atenção:** a ordem das linhas é usada no cálculo de Durbin–Watson. Para interpretá-lo como verificação de autocorrelação, preserve a ordem real das leituras, especialmente quando as concentrações foram randomizadas. A falta de ajuste requer pelo menos três concentrações e réplicas independentes suficientes para estimar erro puro. Quando um diagnóstico não puder ser estimado, o aplicativo não deve declarar a linearidade plenamente validada.
+
+### Precisão, veracidade e recuperação
+
+Novo módulo com três abas independentes:
+
+- **Precisão:** repetibilidade por variância residual intradia; precisão intermediária por ANOVA de um fator, inclusive séries com quantidades desiguais de réplicas.
+- **Veracidade (MR/MRC):** média, desvio-padrão, viés absoluto/relativo, IC e teste t exploratório; a incerteza padrão do valor certificado entra na avaliação aproximada de compatibilidade.
+- **Recuperação:** fortificação em níveis e réplicas configuráveis, resultados individuais, média, CV, IC e intervalo de aceitação definido pelo usuário.
+
+Os novos módulos são didáticos; não substituem o planejamento do estudo de validação nem os critérios do guia adotado.
+
 ## Linearidade
 
 Fluxo implementado:
