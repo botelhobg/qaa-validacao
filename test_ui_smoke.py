@@ -12,4 +12,5 @@ if __name__=="__main__":
     check("Linearidade")
     check("Efeito de matriz")
     check("Precisão, veracidade e recuperação")
-    print("OK — interface Streamlit carrega nos três módulos")
+    check("Limites analíticos e decisão")
+    print("OK — interface Streamlit carrega nos quatro módulos")
