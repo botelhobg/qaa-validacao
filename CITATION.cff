@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use this software in teaching or research, please cite the software repository and the associated publication when available."
 title: "QAA — Validação Analítica"
 type: software
-version: "0.2.0"
-date-released: "2026-10-08"
+version: "0.3.0"
+date-released: "2026-10-16"
 authors:
   - family-names: "Botelho"
     given-names: "Bruno Gonçalves"
