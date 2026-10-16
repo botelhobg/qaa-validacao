@@ -2,6 +2,17 @@
 
 All notable changes to **QAA — Validação Analítica** will be documented here.
 
+## [0.3.1] — 2026-10-16
+
+### Added
+- Seleção explícita do ensaio de adição-recuperação: matriz branca ou amostra com analito nativo.
+- Tabelas de dados, fórmulas, exemplos e interpretação específicos para cada desenho experimental.
+- Preservação independente do planejamento e dos resultados de cada modalidade.
+- Casos de teste numéricos para a diferença entre recuperação global e recuperação incremental.
+
+### Notes
+- Recuperação próxima de 100% na fortificação incremental não prova ausência de viés no analito nativo.
+
 ## [0.3.0] — 2026-10-16
 
 ### Added
