@@ -103,7 +103,7 @@ def recovery_ui(alpha):
             "Compare diretamente a concentração encontrada com a concentração conhecida "
             "introduzida antes das etapas que deseja avaliar."
         )
-        st.latex(r"R(\\%)=100\\,\\frac{C_{\\mathrm{encontrada}}}{C_{\\mathrm{adicionada}}}")
+        st.latex(r"R(\%)=100\,\frac{C_{\mathrm{encontrada}}}{C_{\mathrm{adicionada}}}")
         st.caption(
             "Se a matriz já contém analito, esta fórmula não se aplica sem uma "
             "correção/avaliação apropriada do teor inicial."
@@ -116,8 +116,8 @@ def recovery_ui(alpha):
             "medições emparelhadas ou a uma estimativa basal analiticamente justificada."
         )
         st.latex(
-            r"R(\\%)=100\\,\\frac{C_{\\mathrm{fortificada}}"
-            r"-C_{\\mathrm{sem\\,fortificacao}}}{C_{\\mathrm{adicionada}}}"
+            r"R(\%)=100\,\frac{C_{\mathrm{fortificada}}"
+            r"-C_{\mathrm{sem\,fortificacao}}}{C_{\mathrm{adicionada}}}"
         )
         st.caption(
             "A recuperação da quantidade adicionada pode ser 100% mesmo quando "
