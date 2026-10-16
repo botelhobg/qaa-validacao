@@ -9,6 +9,8 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from validation_core import analyze_linearity, compare_matrix_effect, result_to_serializable
+from qaa_design import calibration_design_widget
+from qaa_extra_ui import render_validation_page
 
 st.set_page_config(page_title="QAA — Validação Analítica", page_icon="🧪", layout="wide")
 
@@ -26,7 +28,7 @@ div[data-testid="stMetric"] {background:#F3F8F6; border:1px solid #D2E8E1; paddi
 """, unsafe_allow_html=True)
 
 st.title("QAA — Validação Analítica")
-st.caption("v0.2 • Linearidade + Efeito de Matriz • cálculos executados em Python")
+st.caption("v0.3 • Linearidade • Efeito de matriz • Precisão, veracidade e recuperação • Python")
 
 with st.sidebar:
     st.header("Configurações")
@@ -36,7 +38,7 @@ with st.sidebar:
     max_del_pct = st.slider("Máximo de exclusões (%)", 0, 30, 22, 1)
     dw_nsim = st.select_slider("Simulações para p(DW)", options=[2000, 5000, 8000, 15000], value=8000)
     st.divider()
-    st.markdown("**Fluxo da versão 0.2**")
+    st.markdown("**Fluxo da versão 0.3**")
     st.caption("MQO → Jackknife → Ryan–Joiner → Brown–Forsythe → Durbin–Watson → ANOVA/falta de ajuste → comparação solvente × matriz.")
 
 
@@ -172,11 +174,13 @@ def show_linearity_result(res, label="Curva"):
 
 
 def data_source_widget(key, demo_df):
-    mode = st.radio("Entrada de dados", ["Exemplo", "Editar/colar tabela", "Enviar arquivo"], horizontal=True, key=f"mode_{key}")
+    mode = st.radio("Entrada de dados", ["Configurar ensaio", "Exemplo", "Editar/colar tabela", "Enviar arquivo"], horizontal=True, key=f"mode_{key}")
+    if mode == "Configurar ensaio":
+        return calibration_design_widget(key)
     if mode == "Exemplo":
         return demo_df.copy()
     if mode == "Editar/colar tabela":
-        return st.data_editor(demo_df.copy(), num_rows="dynamic", use_container_width=True, key=f"edit_{key}")
+        return st.data_editor(pd.DataFrame({"concentracao":[None]*10, "resposta":[None]*10}), num_rows="dynamic", use_container_width=True, key=f"edit_{key}")
 
     uploaded = st.file_uploader("CSV, XLSX, XLSM ou XLS", type=["csv","xlsx","xlsm","xls"], key=f"up_{key}")
     if uploaded is None:
@@ -240,7 +244,7 @@ DEMO_MAT = pd.DataFrame({
     "resposta": [0.087,0.098,0.109,0.182,0.192,0.202,0.274,0.286,0.298,0.368,0.380,0.392,0.461,0.474,0.487,0.555,0.568,0.581]
 })
 
-page = st.sidebar.radio("Módulo", ["Linearidade", "Efeito de matriz", "Sobre o método"])
+page = st.sidebar.radio("Módulo", ["Linearidade", "Efeito de matriz", "Precisão, veracidade e recuperação", "Sobre o método"])
 
 if page == "Linearidade":
     st.header("Linearidade")
@@ -331,6 +335,9 @@ elif page == "Efeito de matriz":
             payload=json.dumps({"solvente":result_to_serializable(rs),"matriz":result_to_serializable(rm),"efeito_matriz":comp},ensure_ascii=False,indent=2)
             st.download_button("Baixar resultados (JSON)",payload,file_name="resultado_efeito_matriz.json",mime="application/json")
 
+elif page == "Precisão, veracidade e recuperação":
+    render_validation_page(alpha)
+
 else:
     st.header("Sobre o método")
     st.markdown("""
@@ -352,4 +359,4 @@ else:
 
     **Observação sobre Durbin–Watson**: a planilha histórica usa limites tabulados. Para permitir qualquer número de observações no aplicativo, o valor de *d* é calculado da mesma forma, enquanto o *p* é estimado por Monte Carlo condicionado ao desenho de concentrações.
     """)
-    st.info("Esta é uma ferramenta didática e de apoio à validação. A decisão final deve respeitar o guia/protocolo adotado pelo laboratório.\n\n**Versão:** 0.2 • QAA II")
+    st.info("Esta é uma ferramenta didática e de apoio à validação. A decisão final deve respeitar o guia/protocolo adotado pelo laboratório.\n\n**Versão:** 0.3 • QAA II")
