@@ -36,6 +36,45 @@ def run():
     assert len(pts)==4 and len(summary)==2
     assert abs(summary.iloc[0]["media_recuperacao"]-92.5)<1e-10
 
+    # Matriz branca: o valor nominal é conhecido, R = C_encontrada/C_adicionada.
+    blank_matrix=pd.DataFrame({
+        "adicionado":[10,10,10,20,20,20],
+        "encontrada":[11.8,12.,12.2,23.8,24.,24.2],
+    })
+    vals_blank,by_level_blank=recovery(blank_matrix,mode="matriz_branca")
+    assert len(vals_blank)==6 and len(by_level_blank)==2
+    assert np.allclose(by_level_blank["media_recuperacao"],[120.,120.])
+    assert by_level_blank["dentro_faixa_definida"].all()
+    assert np.all(np.isfinite(by_level_blank["IC_inferior"]))
+
+    # Amostra nativa: R = (fortificada-sem_fortificacao)/adicionada.
+    # Um viés aditivo de +2 mg/L se cancela, e a recuperação ainda é 100%.
+    native=pd.DataFrame({
+        "adicionado":[5.,5.,5.],
+        "sem_fortificacao":[12.,12.,12.],
+        "fortificada":[17.,17.,17.],
+    })
+    vals_native,by_level_native=recovery(native,mode="amostra_nativa")
+    assert np.allclose(vals_native["recuperacao_percent"],100.)
+    assert abs(by_level_native.iloc[0]["media_recuperacao"]-100)<1e-10
+    blank_example=pd.DataFrame({"adicionado":[10.],"encontrada":[12.]})
+    _,blank_one=recovery(blank_example,mode="matriz_branca")
+    assert blank_one.iloc[0]["media_recuperacao"]==120.
+    assert np.isnan(blank_one.iloc[0]["IC_inferior"])
+
+    try:
+        recovery(native,mode="matriz_branca")
+    except ValueError:pass
+    else:raise AssertionError("Matriz branca exige coluna encontrada.")
+    try:
+        recovery(native,mode="tipo_inexistente")
+    except ValueError:pass
+    else:raise AssertionError("Tipo de ensaio inválido deveria ser rejeitado.")
+    try:
+        recovery(pd.DataFrame({"adicionado":[0.],"encontrada":[2.]}),mode="matriz_branca")
+    except ValueError:pass
+    else:raise AssertionError("Adição nula deveria ser rejeitada.")
+
     no_reps=pd.DataFrame({"concentracao":[1,2,3,4,5,6],
                           "resposta":[.12,.23,.35,.46,.58,.69]})
     result=analyze_linearity(no_reps,remove_outliers=False,dw_nsim=200)
