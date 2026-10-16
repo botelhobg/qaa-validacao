@@ -326,7 +326,7 @@ def analyze_linearity(
         and (bf.p_value is not None and bf.p_value >= alpha)
         and (dw.p_value is not None and dw.p_value >= alpha_dw)
     )
-    linear_ok = premise_ok and (anova["p_reg"] < alpha) and (anova["p_lof"] is None or anova["p_lof"] >= alpha)
+    linear_ok = premise_ok and (anova["p_reg"] < alpha) and (anova["p_lof"] is not None and anova["p_lof"] >= alpha)
 
     return {
         "fit": fit, "deleted": deleted, "points": points,
@@ -398,7 +398,7 @@ def compare_matrix_effect(solvent: Dict[str, Any], matrix: Dict[str, Any], alpha
         "p_slope": p_b, "t_intercept": float(t_a), "df_intercept": float(df_a),
         "p_intercept": p_a, "matrix_effect_percent_slope": float(matrix_effect_percent),
         "classification": classification,
-        "calibration_in_solvent_recommended": not (prop or const),
+        "calibration_in_solvent_recommended": (solvent["linear_ok"] and matrix["linear_ok"] and not (prop or const)),
     }
 
 
