@@ -4,15 +4,29 @@ Aplicativo web didático e reprodutível para avaliação de **linearidade** e *
 
 ## Estado atual
 
-**Versão 0.3.1**
+**Versão 0.4.0**
 
 Módulos disponíveis:
 - Linearidade
 - Efeito de matriz
 - Precisão, veracidade e recuperação
+- Limites analíticos e capacidade de decisão
 
 O projeto está sendo organizado também como software de pesquisa, com documentação metodológica, testes automáticos, versionamento e plano de verificação para futura publicação.
 
+
+## Novidades da versão 0.4 — Limites analíticos e decisão
+
+O novo módulo **Limites analíticos e decisão** contém quatro abas com fórmulas e critérios separados:
+
+1. **LoB/LoD (branco):** resultados de brancos e amostras de baixa concentração, com α, β configuráveis e correção opcional para o desvio-padrão amostral. Os dados devem ser fornecidos no domínio de concentração aparente.
+2. **DL/QL (ICH Q2(R2)):** `DL = 3,3σ/|S|` e `QL = 10σ/|S|`; informe a inclinação e o desvio-padrão da resposta, ou estime σ com réplicas do branco.
+3. **LoQ experimental:** os níveis de concentração e o número de réplicas são editáveis (inclusive desbalanceados). O usuário estabelece CV máximo, viés máximo e réplicas mínimas; o app identifica o menor nível ensaiado que cumpre os critérios.
+4. **CCα/CCβ:** representação **gaussiana unilateral didática**, com α, β, limite permitido e desvio-padrão próximos ao limite configuráveis; a decisão para um resultado individual é mostrada graficamente.
+
+**Atenção:** LoB/LoD por séries únicas não substituem o protocolo completo CLSI EP17. A estimativa de DL/QL pela ICH demanda confirmação experimental. O exemplo de CCα/CCβ **não constitui implementação integral do Regulamento (UE) 2021/808** e não pode ser usado isoladamente para decisões regulatórias.
+
+Veja as fórmulas, premissas, exemplos numéricos e limitações em [docs/LIMITS.md](docs/LIMITS.md).
 
 ## Novidades da versão 0.3
 
@@ -108,6 +122,7 @@ O arquivo `runtime.txt` solicita Python 3.12 e `.streamlit/config.toml` define o
 ## Documentação para pesquisa e publicação
 
 - `docs/METHODS.md` — descrição das rotinas estatísticas implementadas.
+- `docs/LIMITS.md` — base metodológica do módulo de limites e capacidade de decisão.
 - `docs/REPRODUCIBILITY.md` — plano de verificação e comparação com as planilhas históricas.
 - `docs/PAPER_OUTLINE.md` — esqueleto inicial de manuscrito.
 - `CHANGELOG.md` — histórico de versões.
@@ -136,4 +151,4 @@ Ferramenta didática e de apoio à pesquisa. A decisão final sobre a validade d
 
 ## Próximos módulos planejados
 
-Limites, CCα/CCβ, incerteza e decisão de conformidade.
+Incerteza de medição, propagação, Kragten, top-down e decisões com banda de guarda.
