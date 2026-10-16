@@ -63,25 +63,71 @@ def bias_mrc(values,assigned_value,u_ref=0.,alpha=.05):
             "ic_media":(float(mean-tc*se),float(mean+tc*se)),
             "U_diferenca_aprox":U,"compatibilidade_expandida":abs(bias)<=U}
 
-def recovery(table,alpha=.05,lower=80.,upper=120.):
-    cols=["adicionado","sem_fortificacao","fortificada"]
+
+def recovery(table, alpha=.05, lower=80., upper=120., mode="amostra_nativa"):
+    """Avalia dois desenhos distintos de adição-recuperação.
+
+    mode="matriz_branca": R = 100*C_encontrada/C_adicionada.
+      Requer matriz sem analito nativo e concentração nominal conhecida.
+    mode="amostra_nativa": R = 100*(C_fortificada-C_sem_fortificacao)/C_adicionada.
+      Cada linha representa uma medição pareada ou uma estimativa basal apropriada.
+
+    Retorna (leituras individuais com recuperação, resumo por nível).
+    A recuperação não constitui, sozinha, prova geral da veracidade.
+    """
+    if mode == "matriz_branca":
+        cols = ["adicionado", "encontrada"]
+    elif mode == "amostra_nativa":
+        cols = ["adicionado", "sem_fortificacao", "fortificada"]
+    else:
+        raise ValueError("Tipo de ensaio inválido. Escolha matriz_branca ou amostra_nativa.")
+
     if not set(cols).issubset(table.columns):
-        raise ValueError("Use colunas adicionado, sem_fortificacao e fortificada.")
-    x=table[cols].copy()
-    for c in cols: x[c]=number(x[c]).to_numpy()
-    x=x.dropna().reset_index(drop=True)
-    if x.empty:raise ValueError("Informe pelo menos uma medição completa.")
-    if (x.adicionado<=0).any():raise ValueError("A quantidade adicionada deve ser positiva.")
-    x["recuperacao_percent"]=100*(x.fortificada-x.sem_fortificacao)/x.adicionado
-    results=[]
-    for lev,g in x.groupby("adicionado",sort=True):
-        arr=g.recuperacao_percent.to_numpy(float)
-        n=len(arr);mean=float(arr.mean())
-        sd=float(np.std(arr,ddof=1)) if n>1 else np.nan
-        tc=float(stats.t.ppf(1-alpha/2,n-1)) if n>1 else None
-        ci=(float(mean-tc*sd/np.sqrt(n)),float(mean+tc*sd/np.sqrt(n))) if n>1 else (None,None)
-        results.append({"adicionado":float(lev),"n":n,"media_recuperacao":mean,
-            "sd":sd,"CV_percent":100*sd/abs(mean) if n>1 and mean else None,
-            "IC_inferior":ci[0],"IC_superior":ci[1],
-            "dentro_faixa_definida":lower<=mean<=upper})
-    return x,pd.DataFrame(results)
+        raise ValueError("Colunas necessárias para este tipo de ensaio: " + ", ".join(cols))
+
+    x = table[cols].copy()
+    for col in cols:
+        x[col] = number(x[col]).to_numpy()
+    x = x.replace([np.inf, -np.inf], np.nan).dropna().reset_index(drop=True)
+
+    if x.empty:
+        raise ValueError("Informe pelo menos uma medição completa.")
+    if (x["adicionado"] <= 0).any():
+        raise ValueError("A concentração adicionada precisa ser positiva.")
+    if not 0 <= lower <= upper:
+        raise ValueError("O intervalo de aceitação deve ter limites ordenados e não negativos.")
+    if not 0 < alpha < 1:
+        raise ValueError("α deve estar entre 0 e 1.")
+
+    if mode == "matriz_branca":
+        x["recuperacao_percent"] = 100.0 * x["encontrada"] / x["adicionado"]
+    else:
+        x["recuperacao_percent"] = (
+            100.0 * (x["fortificada"] - x["sem_fortificacao"]) / x["adicionado"]
+        )
+
+    results = []
+    for level, g in x.groupby("adicionado", sort=True):
+        values = g["recuperacao_percent"].to_numpy(float)
+        n = len(values)
+        avg = float(np.mean(values))
+        sd = float(np.std(values, ddof=1)) if n > 1 else np.nan
+        if n > 1:
+            tcrit = float(stats.t.ppf(1 - alpha / 2, n - 1))
+            ci_low = float(avg - tcrit * sd / np.sqrt(n))
+            ci_high = float(avg + tcrit * sd / np.sqrt(n))
+        else:
+            ci_low = ci_high = np.nan
+
+        results.append({
+            "adicionado": float(level),
+            "n": n,
+            "media_recuperacao": avg,
+            "sd": sd,
+            "CV_percent": 100.0 * sd / abs(avg) if n > 1 and avg != 0 else np.nan,
+            "IC_inferior": ci_low,
+            "IC_superior": ci_high,
+            "dentro_faixa_definida": bool(lower <= avg <= upper),
+        })
+
+    return x, pd.DataFrame(results)
