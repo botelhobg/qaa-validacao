@@ -4,11 +4,12 @@ Aplicativo web didático e reprodutível para avaliação de **linearidade** e *
 
 ## Estado atual
 
-**Versão 0.2.0**
+**Versão 0.3.1**
 
 Módulos disponíveis:
 - Linearidade
 - Efeito de matriz
+- Precisão, veracidade e recuperação
 
 O projeto está sendo organizado também como software de pesquisa, com documentação metodológica, testes automáticos, versionamento e plano de verificação para futura publicação.
 
@@ -35,9 +36,26 @@ Novo módulo com três abas independentes:
 
 - **Precisão:** repetibilidade por variância residual intradia; precisão intermediária por ANOVA de um fator, inclusive séries com quantidades desiguais de réplicas.
 - **Veracidade (MR/MRC):** média, desvio-padrão, viés absoluto/relativo, IC e teste t exploratório; a incerteza padrão do valor certificado entra na avaliação aproximada de compatibilidade.
-- **Recuperação:** fortificação em níveis e réplicas configuráveis, resultados individuais, média, CV, IC e intervalo de aceitação definido pelo usuário.
+- **Recuperação:** escolha entre *matriz branca (teor conhecido)* e *amostra com analito nativo (adição incremental)*; fortificação em níveis e réplicas configuráveis, média, CV, IC e critérios definidos pelo usuário.
 
 Os novos módulos são didáticos; não substituem o planejamento do estudo de validação nem os critérios do guia adotado.
+
+
+### Adição-recuperação: dois desenhos experimentais (v0.3.1)
+
+Na aba **Precisão, veracidade e recuperação → Recuperação**, selecione o tipo de ensaio antes de gerar os dados:
+
+**1. Matriz branca — concentração conhecida.** Use quando o teor nativo de analito for ausente/desprezível. Colunas: `adicionado` e `encontrada`. A recuperação é:
+
+`R (%) = 100 × C_encontrada / C_adicionada`
+
+**2. Amostra com analito nativo — fortificação incremental.** Use quando a amostra já contém analito. Colunas: `adicionado`, `sem_fortificacao` e `fortificada`. Cada linha corresponde a um par de medições ou a uma estimativa basal adequadamente justificada. A recuperação é:
+
+`R (%) = 100 × (C_fortificada - C_sem_fortificacao) / C_adicionada`
+
+**Exemplo didático:** em matriz branca, preparar 10 mg/L e encontrar 12 mg/L fornece 120%. Já para uma amostra original medida como 12 mg/L e fortificada com +5 mg/L, encontrar 17 mg/L fornece 100% de recuperação **incremental**. Um viés aditivo pode se cancelar na segunda expressão, portanto essa recuperação não comprova, isoladamente, veracidade na medida do analito nativo.
+
+As concentrações precisam estar na mesma unidade e corrigidas por diluições; o padrão deve ser adicionado antes das etapas do procedimento que se pretende avaliar. Use referências independentes e critérios apropriados ao método.
 
 ## Linearidade
 
@@ -118,4 +136,4 @@ Ferramenta didática e de apoio à pesquisa. A decisão final sobre a validade d
 
 ## Próximos módulos planejados
 
-Precisão, recuperação/veracidade, limites, CCα/CCβ, incerteza e decisão de conformidade.
+Limites, CCα/CCβ, incerteza e decisão de conformidade.
